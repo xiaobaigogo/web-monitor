@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>ajax</div>
+  <!-- <script>
+    function newFetch() {
+      const nativeFetch = window.fetch;
+      if (nativeFetch) {
+        window.fetch = function traceFetch(url, init) {
+          const timestamp = Date.now()
+          const result = nativeFetch(url, init);
+          result.then((res) => {
+            const { url, status } = res;
+            if (status === 200 || status === 304) {
+              // 发送请求
+              const data = {
+                src: url,
+                responseStatus: status,
+                duration: Date.now() - timestamp,
+                params: init && init.body ? init.body : undefined,
+              }
+              console.log(data)
+            } else {
+              // 发送失败
+              const data = {
+                src: url,
+                responseStatus: status,
+                params: init && init.body ? init.body : undefined,
+              }
+              console.log(data)
+
+            }
+          }).catch((e) => {
+            // 无法发起请求,连接失败
+
+          });
+          return result;
+        };
+      }
+    }
+    newFetch()
+    // const res = window.fetch('https://talent.baidu.com/jobs/detail/GRADUATE/0e3a549f-938e-4fbd-9f9b-479a770c4a0e')
+    // console.log(res)
+    // res.then((res) => {
+    //   console.log(res)
+    // })
+
+    fetch('http://localhost:3000/list', { method: 'get' })
+      .then(response => console.log(response))
+      .then(data => console.log(data));
+  </script> -->
+</body>
+
+</html>

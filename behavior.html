@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button>click</button>
+  <a href="#a">a</a>
+  <!-- <script>
+    function getEventData(eventType = [], targetEls = []) {
+    eventType.forEach((event) => {
+        window.addEventListener(event, (e) => {
+            if (e.target instanceof HTMLElement) {
+                if (targetEls.includes(e.target.nodeName.toLowerCase())) {
+                    const data = {
+                        dom: e.target.getAttribute('id')? `#${e.target.getAttribute('id')}` : (e.target.getAttribute('class')? `.${e.target.getAttribute('class')}`: e.target.nodeName.toLowerCase()),
+                        eventType: event,
+                        time: new Date()
+                    };
+                    console.log(data);
+                }
+            }
+        });
+    });
+}
+
+console.log()
+const eventType = ['click', 'dbclick'];
+const ignoreTarget = ['button'];
+getEventData(eventType, ignoreTarget);
+  </script> -->
+</body>
+
+</html>

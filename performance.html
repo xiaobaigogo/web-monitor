@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button>click</button>
+  <script>
+    function getPerformanceDataI(firstPaint, firstContentfulPaint, largestContentfulPaint) {
+      // performance.timing: PerformanceTiming 兼容至 IE9
+      const {
+        fetchStart,
+        connectStart,
+        connectEnd,
+        responseStart,
+        responseEnd,
+        domLoading,
+        domInteractive,
+        domContentLoadedEventStart,
+        domContentLoadedEventEnd,
+        loadEventStart,
+        domainLookupStart,
+        domainLookupEnd,
+      } = performance.timing
+      const perfoemanceData = {
+        connectTime: connectEnd - connectStart,
+        ttfbTime: responseStart - fetchStart,
+        responseTime: responseEnd - responseStart,
+        parseDOMTime: domInteractive - responseEnd,
+        domContentLoadedTime: domContentLoadedEventEnd - domContentLoadedEventStart, // domContentLoadedEventEnd – fetchStart
+        domContentLoaded: domContentLoadedEventEnd - fetchStart,
+        loadTime: loadEventStart - fetchStart,
+        parseDNSTime: domainLookupEnd - domainLookupStart,
+        domReadyTime: domContentLoadedEventStart - fetchStart,
+        firstPaint,
+        timeToInteractive: domInteractive - domLoading,
+        firstContentfulPaint,
+        largestContentfulPaint,
+      }
+      return perfoemanceData
+    }
+
+
+    async function getPerformanceData() {
+      // console.log(111);
+      let firstPaint
+      let firstContentfulPaint
+      let largestContentfulPaint
+      new PerformanceObserver((entryList, observer) => {
+        const entryFp = entryList.getEntriesByName('first-paint')
+        const entryFcp = entryList.getEntriesByName('first-contentful-paint')
+        firstPaint = Math.round(entryFp[0].startTime)
+        firstContentfulPaint = Math.round(entryFcp[0].startTime)
+        observer.disconnect()
+      }).observe({ type: 'paint', buffered: true })
+      new PerformanceObserver((entryList, observer) => {
+        const entries = entryList.getEntries()
+        const entry = entries[entries.length - 1]
+        console.log(entry)
+        largestContentfulPaint = Math.round(entry.startTime)
+        observer.disconnect()
+      }).observe({ type: 'largest-contentful-paint', buffered: true })
+
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const data = getPerformanceDataI(firstPaint, firstContentfulPaint, largestContentfulPaint)
+          console.log(data)
+        }, 2500)
+      })
+    }
+
+    getPerformanceData()
+  </script>
+</body>
+
+</html>

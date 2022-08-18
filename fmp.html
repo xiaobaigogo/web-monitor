@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  
+</head>
+
+<body>
+
+  <script>
+    const div = document.createElement('div')
+    div.innerHTML = "abc"
+    div.setAttribute('id', 'fmp')
+    document.body.appendChild(div)
+  </script>
+  <!-- <div id="fmp">
+    <div>click</div>
+    <span>span</span>
+  </div> -->
+  <script>
+
+    const next = window.requestAnimationFrame ? requestAnimationFrame : setTimeout
+    // const targetNode = document.getElementById('fmp')
+    // console.log(targetNode);
+    const config = { attributes: true, childList: true, subtree: true }
+    // console.log(next, targetNode, config)
+    const startTime = performance.now()
+    console.log(startTime)
+
+    const observer = new MutationObserver(mutationlist => {
+      // console.log(111)
+      console.log(mutationlist)
+      const entry = {
+        children: [],
+      }
+      for (const mutation of mutationlist) {
+        if (mutation.target === document.getElementById('fmp')) {
+          next(() => {
+            endTime = performance.now()
+            console.log(document.getElementById('fmp'))
+            console.log(endTime)
+            console.log(endTime - startTime)
+          })
+        }
+      }
+
+    })
+    observer.observe(document, config)
+
+    // targetNode.setAttribute('class', 'btn')
+  </script>
+</body>
+
+</html>

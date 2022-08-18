@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button onclick="pushState1()">pushState1</button>
+  <button onclick="pushState2()">pushState2</button>
+  <button onclick="replaceState()">replaceState</button>
+  <button onclick="popState()">popState</button>
+  <script>
+    let oldURL = window.location.href; // 最后一次的url
+
+    newHistoryState({ pvHashTag: true })
+    function newHistoryState({ pvHashTag = false }) {
+      let lastIsPop;
+      if (window.history.pushState) {
+        // console.log(111)
+        const nativePushState = window.history.pushState;
+        window.history.pushState = (data, title, url) => {
+          console.log(111)
+          const result = nativePushState.call(window.history, data, title, url);
+          if (url) {
+            const data = {
+              url: window.location.href,
+              referer: oldURL,
+              title,
+              time: new Date()
+            };
+            oldURL = window.location.href
+            console.log(data);
+          }
+          return result;
+        };
+        const nativeRepalceState = window.history.replaceState;
+        window.history.replaceState = (data, title, url) => {
+          const result = nativeRepalceState.call(window.history, data, title, url);
+          if (url) {
+            const data = {
+              url: window.location.href,
+              referer: oldURL,
+              title,
+              time: new Date()
+            };
+            oldURL = window.location.href
+            console.log(data);
+          }
+          return result;
+        };
+        // hash变化也会触发popstate事件,而且会先触发popstate事件
+        // 可以使用popstate来代替hashchange,如果支持History H5 Api
+        // https://developer.mozilla.org/zh-CN/docs/Web/API/Window/popstate_event
+        window.addEventListener('popstate', () => {
+          if (window.location.hash !== '') {
+            const oldHost = oldURL.indexOf('#') > 0 // 多页面情况下 history模式刷新还是在pv页面
+              ? oldURL.slice(0, oldURL.indexOf('#'))
+              : oldURL;
+            // 如果只是改变锚点没有改变真正的url
+            if (window.location.href.slice(0, window.location.href.indexOf('#')) === oldHost && !pvHashTag)
+              return;
+          }
+          lastIsPop = true;
+          const data = {
+            url: window.location.href,
+            referer: oldURL,
+            title: document.title,
+            time: new Date()
+          };
+          oldURL = window.location.href
+          console.log(data);
+          // tracePageView();
+        });
+        window.addEventListener('hashchange', () => {
+          if (pvHashTag && !lastIsPop) {
+            const data = {
+              url: window.location.href,
+              referer: oldURL,
+              title: document.title,
+              time: new Date()
+            };
+            oldURL = window.location.href
+            console.log(data);
+          }
+          lastIsPop = false;
+        });
+      }
+    }
+  </script>
+
+  <script>
+    function pushState1(params) {
+      console.log('pushState1')
+      window.history.pushState({ data: 1 }, 'page1', 'push1.html')
+    }
+    function pushState2(params) {
+      console.log('pushState2')
+      window.history.pushState({ data: 2 }, 'page2', 'push2.html')
+    }
+    function replaceState(params) {
+      window.history.replaceState({ data: 3 }, 'page3', 'replace.html')
+      console.log('replaceState')
+
+    }
+    function popState(params) {
+      window.history.back()
+
+      console.log('popState')
+    }
+  </script>
+</body>
+
+</html>
