@@ -1,3 +1,4 @@
+import { baseType } from "./index";
 
 export const BrowserType = [
   'Safari', 'Chrome', 'Edge', 'IE', 'Firefox', 'Firefox Focus', 'Chromium', 'Opera', 'Vivaldi', 'Yandex', 'Arora', 'Lunascape', 'QupZilla', 'Coc Coc', 'Kindle', 'Iceweasel', 'Konqueror', 'Iceape', 'SeaMonkey', 'Epiphany', '360', '360SE', '360EE', 'UC', 'QQBrowser', 'QQ', 'Baidu', 'Maxthon', 'Sogou', 'LBBROWSER', '2345Explorer', 'TheWorld', 'XiaoMi', 'Quark', 'Qiyu', 'Wechat', 'Taobao', 'Alipay', 'Weibo', 'Douban', 'Suning', 'iQiYi'
@@ -220,7 +221,7 @@ export const OsVersionMap: version = {
  * @browser 浏览器类型
  * @browserInfo 浏览器信息
  */
-export interface DeviceData {
+export interface DeviceData extends baseType {
   deviceType: string | undefined
   OS: string | undefined
   OSVersion: string | undefined

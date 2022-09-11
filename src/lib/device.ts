@@ -1,6 +1,8 @@
 import type { DeviceData } from '../type/device'
 import { BrowserType, BrowserVersionMap, DeviceType, EngineType, OsType, OsVersionMap } from '../type/device'
 
+import { Client } from "../core/Client";
+import { keyType } from '../type/index';
 const _window: Window = window
 
 interface InfoMap {
@@ -176,6 +178,7 @@ export function getDeviceData() {
       browser: getValue(map, BrowserType),
       browserInfo: getBrowserInfo(map, ua),
     }
+    Client.sender.saveData(data, keyType.Device)
     return data
   }
   else {

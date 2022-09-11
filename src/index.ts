@@ -1,3 +1,4 @@
-const abc: string = '123'
+import  Client  from "./core/index"
 
-console.log(abc)
+//@ts-expect-error
+window.client = Client

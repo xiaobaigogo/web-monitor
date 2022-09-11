@@ -1,4 +1,7 @@
 import { ErrorData } from "../type/error";
+import { Client } from "../core/Client";
+import { keyType } from "../type/index";
+
 export function getPromiseError(): ErrorData | void {
   window.addEventListener('unhandledrejection', (e) => {
     try {
@@ -8,26 +11,30 @@ export function getPromiseError(): ErrorData | void {
       let errorLineno: number | undefined
       let errorColno: number | undefined
       if (typeof reason === "string") {
+        // console.log(reason)
         errorMessage = reason;
       } else if (typeof reason === "object") {
-        errorMessage = reason.message;
+        // console.log(reason)
+        errorMessage = reason;
         if (reason.stack) {
           let matchResult = reason.stack.match(/at\s+(.+):(\d+):(\d+)/);
           errorFilename = matchResult[1];
-          errorLineno = matchResult[2];
-          errorColno = matchResult[3];
+          errorLineno = Number(matchResult[2]);
+          errorColno = Number(matchResult[3]);
         }
       }
       e.promise.catch((err) => {
         const data: ErrorData = {
           errorType: 'promise-err',
           // errorUrl: e.path.toString(),
-          errorMessage: e.reason,
+          errorMessage,
           errorFilename,
           errorLineno,
-          errorColno
+          errorColno,
+          time: (Date.now()).toString()
         }
-        return data
+        // console.log(data)
+        Client.sender.saveData(data, keyType.Error)
       })
     } catch (error) {
       console.log(error)
@@ -48,10 +55,12 @@ export function getJsError(): ErrorData | void {
       errorMessage: e.message,
       errorFilename: e.filename,
       errorLineno: e.lineno,
-      errorColno: e.colno
+      errorColno: e.colno,
+      time: (Date.now()).toString()
     }
+    Client.sender.saveData(data, keyType.Error)
 
-    return data
+    // console.log(data)
   }, true)
 }
 
@@ -62,21 +71,25 @@ export function getResourceError(): ErrorData | void {
       return
     }
 
+    // @ts-expect-error
+    const errorFilename = target.src || target.href
+    const suffix = errorFilename.slice(errorFilename.lastIndexOf('/') + 1)
     const data: ErrorData = {
       errorType: 'resources-err',
       // @ts-expect-error
       errorUrl: target.baseURI || location.href,
-      errorMessage: 'resource loading error',
-      // @ts-expect-error
-      errorFilename: target.src || target.href,
+      errorMessage: `${suffix} loading error`,
+      errorFilename,
+      time: (Date.now()).toString()
     }
+    Client.sender.saveData(data, keyType.Error)
 
-    return data
+    // console.log(data)
   }, true)
 }
 
 
-function isResourceError(target:EventTarget|null):boolean {
+function isResourceError(target: EventTarget | null): boolean {
   if (target instanceof HTMLScriptElement || target instanceof HTMLLinkElement || target instanceof HTMLImageElement || target instanceof HTMLAudioElement || target instanceof HTMLVideoElement) {
     return true
   } else {

@@ -4,10 +4,11 @@ import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
 
 export default {
-  input: './src/index.ts',
+  input: './src/core/index.ts',
   output: {
-    file: path.resolve(__dirname, './dist/index.esm.js'),
-    format: 'cjs'
+    file: path.resolve(__dirname, './dist/index.js'),
+    format: 'umd',
+    name: "index.min.js"
   },
   plugins: [
     // 打包插件

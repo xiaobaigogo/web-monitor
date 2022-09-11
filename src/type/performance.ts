@@ -1,3 +1,5 @@
+import { baseType } from "./index";
+
 /**
  * @connectTime TCP连接耗时
  * @ttfbTime ttfb时间:发出页面请求到接收到应答数据第一个字节所花费的毫秒数
@@ -13,7 +15,7 @@
  * @timeToInteractive 页面首次可交互时间
  * @firstMeaningfulPaint 页面最有意义元素渲染时间
  */
-export interface PerformanceData {
+export interface PerformanceData extends baseType {
   connectTime: number | undefined
   ttfbTime: number | undefined
   responseTime: number | undefined

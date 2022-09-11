@@ -1,14 +1,18 @@
 import { AjaxData } from "../type/ajax";
+import { Client } from "../core/Client";
+
+import { keyType } from "../type/index";
 
 /**
  * fetch请求拦截
  */
 export function newFetch() {
-  const nativeFetch = window.fetch;
+  const nativeFetch = window.fetch.bind(window);
   if (nativeFetch) {
-    window.fetch = function traceFetch(url: RequestInfo, init: RequestInit | undefined) {
+    window.fetch = function traceFetch(url: URL | RequestInfo, init?: RequestInit | undefined) {
       const timestamp = Date.now()
-      const result = nativeFetch(url, init);
+      // @ts-ignore
+      const result = nativeFetch(url, init)
       result.then((res) => {
         const { url, status } = res;
         if (status === 200 || status === 304) {
@@ -18,14 +22,18 @@ export function newFetch() {
             responseStatus: status,
             duration: Date.now() - timestamp,
             params: init && init.body ? init.body : undefined,
+            success: true
           }
+          Client.sender.saveData(data, keyType.Ajax)
         } else {
           // 发送失败
           const data: AjaxData = {
             src: url,
             responseStatus: status,
             params: init && init.body ? init.body : undefined,
+            success: false
           }
+          Client.sender.saveData(data, keyType.Ajax)
         }
       }).catch((e) => {
         // 无法发起请求,连接失败
@@ -72,13 +80,17 @@ export function newAjax() {
             responseStatus: status,
             duration: Date.now() - timestamp,
             params: body ? body : undefined,
+            success: true
           }
+          Client.sender.saveData(data, keyType.Ajax)
         } else {
           const data: AjaxData = {
             src: responseURL,
             responseStatus: status,
             params: body ? body : undefined,
+            success: false
           }
+          Client.sender.saveData(data, keyType.Ajax)
         }
       }
     });

@@ -1,5 +1,8 @@
 import { PerformanceData } from "../type/performance";
 
+import { Client } from "../core/Client";
+import { keyType } from "../type/index";
+
 function getPerformanceDataI(firstPaint?: number, firstContentfulPaint?: number, largestContentfulPaint?: number) {
   // performance.timing: PerformanceTiming 兼容至 IE9
   const {
@@ -55,7 +58,9 @@ export async function getPerformanceData() {
   window.addEventListener('load', () => {
     setTimeout(() => {
       const data = getPerformanceDataI(firstPaint, firstContentfulPaint, largestContentfulPaint)
-      console.log(data)
+      // console.log(data)
+      Client.sender.saveData(data, keyType.Performance)
+
     }, 2500)
   })
 }
