@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function getUv() {
+      const date = new Date()
+
+      let uv = `${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}-${date.getHours()}${date.getMinutes()}${date.getSeconds()}`
+
+      if (localStorage.getItem('uv') == null) {
+        localStorage.setItem('uv', JSON.stringify({ uv, time: new Date() }))
+      } else {
+        // @ts-expect-error
+        let { uvB = uv, time } = JSON.parse(localStorage.getItem('uv'))
+        time = new Date(time)
+        console.log(uvB)
+        console.log(time)
+        // 算为第二天的访客
+        if (time.getFullYear() < date.getFullYear() || time.getMonth() < date.getMonth() || time.getDate() < date.getDate()) {
+          localStorage.removeItem('uv')
+          localStorage.setItem('uv', JSON.stringify({ uv, time: new Date() }))
+        } else {
+          uv = uvB
+        }
+      }
+
+      return uv
+    }
+
+    getUv()
+  </script>
+</body>
+
+</html>

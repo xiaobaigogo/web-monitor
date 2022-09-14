@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+</head>
+
+<body>
+  <button onclick="add()">+1</button>
+  <script>
+    const nums = [1, 2, 3]
+    const proxy = new Proxy(nums, {
+      set: (target, prop, value) => {
+        if (prop == 'length') {
+          console.log(value)
+        }
+        // console.log(target, prop, value)
+        let result = Reflect.set(target, prop, value)
+        return result
+      }
+    })
+
+    // nums.push(3)
+    function add() {
+      proxy.push(1)
+      // console.log(nums)
+    }
+  </script>
+</body>
+
+</html>

@@ -1,8 +1,13 @@
 {
-  "name": "mymonitor-fyd",
-  "version": "1.0.0",
+  "name": "web-monitor-xbgg",
+  "version": "1.0.1",
   "description": "a web monitor",
-  "main": "index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "browser": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup -c",
@@ -23,6 +28,6 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "mymonitor_fyd": "^1.0.0"
+    "web-monitor-xbgg": "^1.0.1"
   }
 }

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./dist/index.js"></script>
+</head>
+
+<body>
+  <button id="btn" onclick="xhrClick(event)">xhrclick</button>
+  <script>
+    const Client = window.client
+    new Client({
+      app_id: '111',
+      app_name: 'test',
+      url: 'http://127.0.0.1:3000/emit_pv',
+      sendConfig: {
+        maxLen: 10,
+        mode: 'immediate',
+        maxTime: 2000
+      },
+      config: {
+        // isRecordBehavior: true,
+        // isRecordAjax: true,
+        // isRecordDevice: true,
+        isRecordPerformance: true,
+        // isRecordJsError: true,
+        // isRecordPromiseError: true,
+        // isRecordResourceError: true,
+        // isRecordPv: true,
+        // isRecordPvHashTag: true
+      }
+    })
+  </script>
+  <img src="aa.jpg">
+  <button onclick="pushState1()">click-pushState1</button>
+  <button onclick="pushState2()">click-pushState2</button>
+  <button onclick="popState()">click-popState</button>
+  <button onclick="replaceState()">click-replaceState</button>
+</body>
+<script>
+  const fns = [pushState1, pushState2, replaceState, popState]
+  function randomPush() {
+    const index = Math.floor(Math.random() * 4)
+    fns[index]()
+    setTimeout(() => {
+      randomPush()
+    }, 500);
+  }
+
+  // randomPush()
+
+  function pushState1() {
+    console.log('pushState1')
+    window.history.pushState({ data: 1 }, 'page1', 'push1.html')
+  }
+  function pushState2() {
+    console.log('pushState2')
+    window.history.pushState({ data: 2 }, 'page2', 'push2.html')
+  }
+  function replaceState() {
+    window.history.replaceState({ data: 3 }, 'page3', 'replace.html')
+    console.log('replaceState')
+
+  }
+  function popState() {
+    window.history.back()
+
+    console.log('popState')
+  }
+
+  // const video = document.createElement('video')
+  // video.src = 'ttt.mp4'
+  // document.body.appendChild(video)
+
+  // new Promise((resolve, reject) => {
+  //   throw Error('promise-error')
+  // })
+
+  // window.error.error = 'abc'
+
+</script>
+<script>
+  function xhrClick(e) {
+    let xhr = new XMLHttpRequest()
+    xhr.open("get", "example.php", false);
+    xhr.send(null);
+  }
+</script>
+
+</html>

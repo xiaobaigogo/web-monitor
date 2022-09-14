@@ -1,3 +1,8 @@
 .DS_Store
-/dist
+demo
+data
+src
 node_modules
+data
+server.js
+serverExpress.js
